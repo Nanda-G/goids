@@ -4,5 +4,5 @@
 Host-based IDS built in Go
 
 ## Supported Operations:
-- DiskInfo():
+- **DiskInfo:**
   Prints Total, Used and Free space in disk and each partition on running machine 
