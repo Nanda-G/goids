@@ -3,6 +3,8 @@ package getinfo
 import (
 	"fmt"
 	"log"
+	"os"
+	"text/tabwriter"
 
 	"github.com/shirou/gopsutil/process"
 )
@@ -14,15 +16,22 @@ func ProcessInfo() {
 		log.Fatal(err)
 	}
 
+	writer := new(tabwriter.Writer)
+
+	// Format in tab-separated columns with a tab stop of 8.
+	writer.Init(os.Stdout, 0, 8, 0, '\t', 0)
+
+	fmt.Fprintf(writer, "PID\tName\tCPU Usage\n")
+
 	for _, proc := range processes {
 		pid := proc.Pid
-		// (time.Sleep(time.Second * 1))
 
 		name, _ := proc.Name()
 		cpuPercent, _ := proc.CPUPercent()
 
 		if cpuPercent > 1 {
-			fmt.Printf("PID: %v \tName: %v \t\tCPU Usage: %v%%\n", pid, name, int(cpuPercent))
+			fmt.Fprintf(writer, "%v\t%v\t%v%%\n", pid, name, int(cpuPercent))
+			writer.Flush()
 		}
 	}
 }

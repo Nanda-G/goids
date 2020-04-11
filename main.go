@@ -21,7 +21,7 @@ func main() {
 	// p, _ := process.Processes()
 	// fmt.Printf("\nList of Processes Running: \n")
 	infoStat, _ := host.Info()
-	fmt.Printf("Total processes: %d\n", infoStat.Procs)
+	fmt.Printf("Total processes: %d\t", infoStat.Procs)
 	miscStat, _ := load.Misc()
 	fmt.Printf("Running processes: %d\n", miscStat.ProcsRunning)
 	getinfo.ProcessInfo()
