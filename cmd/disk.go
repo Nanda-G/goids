@@ -13,10 +13,24 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-package main
+package cmd
 
-import "goids/cmd"
+import (
+	"goids/getinfo"
 
-func main() {
-	cmd.Execute()
+	"github.com/spf13/cobra"
+)
+
+// diskCmd represents the disk command
+var diskCmd = &cobra.Command{
+	Use:   "disk",
+	Short: "List basic information about disk",
+	Long:  `List Total, Used and Free space on all disks.`,
+	Run: func(cmd *cobra.Command, args []string) {
+		getinfo.DiskInfo()
+	},
+}
+
+func init() {
+	rootCmd.AddCommand(diskCmd)
 }
