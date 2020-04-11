@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/obviyus/goids/getinfo"
+	"goids/getinfo"
 
 	"github.com/shirou/gopsutil/cpu"
 	"github.com/shirou/gopsutil/host"

@@ -21,6 +21,8 @@ func ProcessInfo() {
 		name, _ := proc.Name()
 		cpuPercent, _ := proc.CPUPercent()
 
-		fmt.Printf("PID: %v \tName: %v \tCPU Usage: %v%%\n", pid, name, int(cpuPercent))
+		if cpuPercent > 1 {
+			fmt.Printf("PID: %v \tName: %v \t\tCPU Usage: %v%%\n", pid, name, int(cpuPercent))
+		}
 	}
 }
