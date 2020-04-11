@@ -2,8 +2,10 @@ package getinfo
 
 import (
 	"fmt"
-	"strconv"
+	"os"
+	"text/tabwriter"
 
+	"github.com/dustin/go-humanize"
 	"github.com/shirou/gopsutil/disk"
 )
 
@@ -14,19 +16,25 @@ func DiskInfo() {
 
 	var usage []*disk.UsageStat
 
+	writer := new(tabwriter.Writer)
+
+	// Format in tab-separated columns with a tab stop of 8.
+	writer.Init(os.Stdout, 0, 8, 8, '\t', tabwriter.AlignRight)
+
+	fmt.Fprintf(writer, "Drive\t%% Used\tTotal\tUsed\tFree\n")
+
 	for _, part := range parts {
 		u, err := disk.Usage(part.Mountpoint)
 		check(err)
 		usage = append(usage, u)
-		printUsage(u)
+		printUsage(u, writer)
 	}
 }
 
-func printUsage(u *disk.UsageStat) {
-	fmt.Printf(u.Path + "\t" + strconv.FormatFloat(u.UsedPercent, 'f', 2, 64) + "%% full \t")
-	fmt.Printf("Total \t: " + strconv.FormatUint(u.Total/1024/1024/1024, 10) + " GiB \t")
-	fmt.Printf("Free \t:  " + strconv.FormatUint(u.Free/1024/1024/1024, 10) + " GiB \t")
-	fmt.Printf("Used \t:  " + strconv.FormatUint(u.Used/1024/1024/1024, 10) + " GiB \n")
+func printUsage(u *disk.UsageStat, writer *tabwriter.Writer) {
+	fmt.Fprintf(writer, "%v\t%v%%\t%v\t%v\t%v\n", u.Path, int(u.UsedPercent), humanize.Bytes(u.Total), humanize.Bytes(u.Free),
+		humanize.Bytes(u.Used))
+	writer.Flush()
 }
 
 func check(err error) {
