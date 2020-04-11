@@ -3,11 +3,10 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"goids/loginfo"
 	"os"
 
 	"github.com/obviyus/goids/getinfo"
-
+	"github.com/obviyus/goids/loginfo"
 	"github.com/shirou/gopsutil/cpu"
 	"github.com/shirou/gopsutil/host"
 )
