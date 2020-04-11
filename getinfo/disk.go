@@ -23,10 +23,10 @@ func DiskInfo() {
 }
 
 func printUsage(u *disk.UsageStat) {
-	fmt.Println(u.Path + "\t" + strconv.FormatFloat(u.UsedPercent, 'f', 2, 64) + "% full.")
-	fmt.Println("Total: " + strconv.FormatUint(u.Total/1024/1024/1024, 10) + " GiB")
-	fmt.Println("Free:  " + strconv.FormatUint(u.Free/1024/1024/1024, 10) + " GiB")
-	fmt.Println("Used:  " + strconv.FormatUint(u.Used/1024/1024/1024, 10) + " GiB")
+	fmt.Printf(u.Path + "\t" + strconv.FormatFloat(u.UsedPercent, 'f', 2, 64) + "%% full \t")
+	fmt.Printf("Total \t: " + strconv.FormatUint(u.Total/1024/1024/1024, 10) + " GiB \t")
+	fmt.Printf("Free \t:  " + strconv.FormatUint(u.Free/1024/1024/1024, 10) + " GiB \t")
+	fmt.Printf("Used \t:  " + strconv.FormatUint(u.Used/1024/1024/1024, 10) + " GiB \n")
 }
 
 func check(err error) {
