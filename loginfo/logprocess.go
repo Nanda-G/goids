@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"log"
+	"os"
 	"strings"
 
 	"github.com/shirou/gopsutil/cpu"
@@ -25,6 +26,17 @@ type processLog struct {
 // Name, PID, background, CPU Percent, Running Time,
 // Memory Percent, Status and CPU times
 func LogProcessInfo() {
+
+	_, err := os.Stat("logs")
+
+	// If logs folder does not exist, create it
+	if os.IsNotExist(err) {
+		errDir := os.MkdirAll("logs", 0755)
+		if errDir != nil {
+			log.Fatal(err)
+		}
+	}
+
 	processes, err := process.Processes()
 	if err != nil {
 		log.Fatal(err)
@@ -53,6 +65,7 @@ func LogProcessInfo() {
 
 		jsonPL, _ := json.MarshalIndent(pL, "", "    ")
 		var filename strings.Builder
+		filename.WriteString("logs/")
 		filename.WriteString(pL.Name)
 		filename.WriteString(".json")
 		err = ioutil.WriteFile(filename.String(), jsonPL, 0644)
