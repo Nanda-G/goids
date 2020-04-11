@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"log"
+	"strings"
 
 	"github.com/shirou/gopsutil/cpu"
 	"github.com/shirou/gopsutil/process"
@@ -51,7 +52,10 @@ func LogProcessInfo() {
 		}
 
 		jsonPL, _ := json.MarshalIndent(pL, "", "    ")
-		err = ioutil.WriteFile("output.json", jsonPL, 0644)
+		var filename strings.Builder
+		filename.WriteString(pL.Name)
+		filename.WriteString(".json")
+		err = ioutil.WriteFile(filename.String(), jsonPL, 0644)
 		if err != nil {
 			log.Fatal(err)
 		}
