@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"goids/getinfo"
+	"github.com/obviyus/goids/getinfo"
 
 	"github.com/shirou/gopsutil/cpu"
 )
@@ -17,6 +17,6 @@ func main() {
 
 	//TODO: List all processes
 	// p, _ := process.Processes()
-	fmt.Printf("\nList of Processes Running: \n")
+	// fmt.Printf("\nList of Processes Running: \n")
 
 }
