@@ -1,9 +1,11 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 
-	"github.com/obviyus/goids/getinfo"
+	"goids/getinfo"
 
 	"github.com/shirou/gopsutil/cpu"
 	"github.com/shirou/gopsutil/host"
@@ -25,4 +27,6 @@ func main() {
 	miscStat, _ := load.Misc()
 	fmt.Printf("Running processes: %d\n", miscStat.ProcsRunning)
 	getinfo.ProcessInfo()
+	fmt.Print("Press 'Enter' to exit...")
+	bufio.NewReader(os.Stdin).ReadBytes('\n')
 }
