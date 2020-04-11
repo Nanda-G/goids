@@ -3,9 +3,11 @@ package main
 import (
 	"fmt"
 
-	"github.com/obviyus/goids/getinfo"
+	"goids/getinfo"
 
 	"github.com/shirou/gopsutil/cpu"
+	"github.com/shirou/gopsutil/host"
+	"github.com/shirou/gopsutil/load"
 )
 
 func main() {
@@ -18,5 +20,9 @@ func main() {
 	//TODO: List all processes
 	// p, _ := process.Processes()
 	// fmt.Printf("\nList of Processes Running: \n")
-
+	infoStat, _ := host.Info()
+	fmt.Printf("Total processes: %d\n", infoStat.Procs)
+	miscStat, _ := load.Misc()
+	fmt.Printf("Running processes: %d\n", miscStat.ProcsRunning)
+	getinfo.ProcessInfo()
 }
