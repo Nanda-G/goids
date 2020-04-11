@@ -19,8 +19,7 @@ func ProcessInfo() {
 	writer := new(tabwriter.Writer)
 
 	// Format in tab-separated columns with a tab stop of 8.
-	writer.Init(os.Stdout, 0, 8, 0, '\t', 0)
-
+	writer.Init(os.Stdout, 0, 8, 8, '\t', tabwriter.AlignRight)
 	fmt.Fprintf(writer, "PID\tName\tCPU Usage\n")
 
 	for _, proc := range processes {
