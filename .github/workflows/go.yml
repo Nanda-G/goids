@@ -29,5 +29,8 @@ jobs:
     - name: Build
       run: go build -v .
     
-    - name: Coverage Report
+    - name: Coverage report
+      run: bash <(curl -s https://codecov.io/bash).
+    
+    - name: Codecov 
       uses: codecov/codecov-action@v1
