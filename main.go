@@ -2,23 +2,17 @@ package main
 
 import (
 	"fmt"
-	"time"
 
-	"github.com/schollz/progressbar"
-	"github.com/shirou/gopsutil/mem"
-	"github.com/shirou/gopsutil/winservices"
+	"github.com/dustin/go-humanize"
+	"github.com/shirou/gopsutil/cpu"
+	"github.com/shirou/gopsutil/disk"
 )
 
 func main() {
-	v, _ := mem.VirtualMemory()
-	services, _ := winservices.ListServices()
-	bar := progressbar.New(100)
-
-	for {
-		fmt.Printf("Services: %v", services)
-		fmt.Printf(" Total: %v, Free:%v, UsedPercent:%v%%\n", v.Total, v.Free, int64(v.UsedPercent))
-		bar.Set(int(v.UsedPercent))
-
-		time.Sleep(2 * time.Second)
-	}
+	cpu, _ := cpu.Info()
+	disk, _ := disk.Usage("/")
+	// fmt.Printf("Raw CPU data: %v", c)
+	fmt.Printf("Cores: %v \tCPU Model: %v \n", cpu[0].Cores, cpu[0].ModelName)
+	fmt.Printf("Total: %v \tFree: %v \t Used Percent: %v%%", humanize.Bytes(disk.Total), humanize.Bytes(disk.Free),
+		disk.UsedPercent)
 }
