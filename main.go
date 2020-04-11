@@ -3,27 +3,31 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"goids/loginfo"
 	"os"
 
 	"github.com/obviyus/goids/getinfo"
 
 	"github.com/shirou/gopsutil/cpu"
 	"github.com/shirou/gopsutil/host"
-	"github.com/shirou/gopsutil/load"
 )
 
 func main() {
 	cpu, _ := cpu.Info()
 	fmt.Printf("Cores: %v \tCPU Model: %v \n", cpu[0].Cores, cpu[0].ModelName)
 
+	// List partitions and total, used and free space
 	getinfo.DiskInfo()
 
-	//TODO: List all processes
 	infoStat, _ := host.Info()
-	fmt.Printf("Total processes: %d\t", infoStat.Procs)
-	miscStat, _ := load.Misc()
-	fmt.Printf("Running processes: %d\n", miscStat.ProcsRunning)
+	fmt.Printf("Total processes: %d\n", infoStat.Procs)
+
+	// List processes with PID, name and CPU usage
 	getinfo.ProcessInfo()
+
+	// TODO: Logging all ProcessInfo outputs
+	loginfo.LogProcessInfo()
+
 	fmt.Print("Press 'Enter' to exit...")
 	bufio.NewReader(os.Stdin).ReadBytes('\n')
 }
