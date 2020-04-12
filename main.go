@@ -15,7 +15,7 @@ limitations under the License.
 */
 package main
 
-import "goids/cmd"
+import "github.com/obviyus/goids/cmd"
 
 func main() {
 	cmd.Execute()

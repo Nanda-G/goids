@@ -17,9 +17,9 @@ package cmd
 
 import (
 	"fmt"
-	"goids/app"
 	"os"
 
+	"github.com/obviyus/goids/app"
 	"github.com/spf13/cobra"
 
 	homedir "github.com/mitchellh/go-homedir"

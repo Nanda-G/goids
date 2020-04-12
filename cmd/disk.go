@@ -16,7 +16,7 @@ limitations under the License.
 package cmd
 
 import (
-	"goids/getinfo"
+	"github.com/obviyus/goids/getinfo"
 
 	"github.com/spf13/cobra"
 )

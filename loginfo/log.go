@@ -25,7 +25,7 @@ type processLog struct {
 // LogProcessInfo logs all currently running processes with:
 // Name, PID, background, CPU Percent, Running Time,
 // Memory Percent, Status and CPU times
-func LogProcessInfo() {
+func LogProcessInfo() error {
 
 	_, err := os.Stat("logs")
 
@@ -70,7 +70,8 @@ func LogProcessInfo() {
 		filename.WriteString(".json")
 		err = ioutil.WriteFile(filename.String(), jsonPL, 0644)
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 	}
+	return nil
 }
