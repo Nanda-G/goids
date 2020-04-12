@@ -18,7 +18,7 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/obviyus/goids/loginfo"
+	"github.com/obviyus/goids/store"
 	"github.com/spf13/cobra"
 )
 
@@ -30,7 +30,7 @@ var logCmd = &cobra.Command{
 CPU Percent, Running Time, Memory Percent, Status and CPU times in a JSON file
 per process. All logs are stored in ./logs/`,
 	Run: func(cmd *cobra.Command, args []string) {
-		err := loginfo.LogProcessInfo()
+		err := store.LogProcessInfo()
 		if err != nil {
 			fmt.Println("Calling LogProcessInfo failed: ", err)
 		}

@@ -1,4 +1,4 @@
-package loginfo
+package store
 
 import (
 	"encoding/json"

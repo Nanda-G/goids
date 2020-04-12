@@ -17,8 +17,8 @@ package cmd
 
 import (
 	"fmt"
+	
 	"github.com/obviyus/goids/app"
-
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"

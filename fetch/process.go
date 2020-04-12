@@ -1,4 +1,4 @@
-package getinfo
+package fetch
 
 import (
 	"fmt"
