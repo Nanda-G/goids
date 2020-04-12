@@ -43,7 +43,6 @@ func LogProcessInfo() error {
 	}
 
 	for _, proc := range processes {
-		pid := proc.Pid
 		name, _ := proc.Name()
 		background, _ := proc.Background()
 		cpuPercent, _ := proc.CPUPercent()
@@ -53,7 +52,7 @@ func LogProcessInfo() error {
 		cpuTimes, _ := proc.Times()
 
 		pL := processLog{
-			PID:           pid,
+			PID:           proc.Pid,
 			Name:          name,
 			Background:    background,
 			CPUPercent:    cpuPercent,
