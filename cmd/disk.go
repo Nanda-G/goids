@@ -16,6 +16,8 @@ limitations under the License.
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/obviyus/goids/getinfo"
 
 	"github.com/spf13/cobra"
@@ -27,7 +29,10 @@ var diskCmd = &cobra.Command{
 	Short: "List basic information about disk",
 	Long:  `List Total, Used and Free space on all disks.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		getinfo.DiskInfo()
+		err := getinfo.DiskInfo()
+		if err != nil {
+			fmt.Println("Calling DiskInfo failed: ", err)
+		}
 	},
 }
 

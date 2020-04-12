@@ -2,7 +2,6 @@ package getinfo
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"text/tabwriter"
 
@@ -10,10 +9,10 @@ import (
 )
 
 // ProcessInfo lists information about processes running on host machine
-func ProcessInfo() {
+func ProcessInfo() error {
 	processes, err := process.Processes()
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	writer := new(tabwriter.Writer)
@@ -33,4 +32,5 @@ func ProcessInfo() {
 			writer.Flush()
 		}
 	}
+	return nil
 }
