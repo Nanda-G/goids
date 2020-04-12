@@ -1,4 +1,4 @@
-package loginfo
+package store
 
 import (
 	"encoding/json"
@@ -25,7 +25,7 @@ type processLog struct {
 // LogProcessInfo logs all currently running processes with:
 // Name, PID, background, CPU Percent, Running Time,
 // Memory Percent, Status and CPU times
-func LogProcessInfo() {
+func LogProcessInfo() error {
 
 	_, err := os.Stat("logs")
 
@@ -43,7 +43,6 @@ func LogProcessInfo() {
 	}
 
 	for _, proc := range processes {
-		pid := proc.Pid
 		name, _ := proc.Name()
 		background, _ := proc.Background()
 		cpuPercent, _ := proc.CPUPercent()
@@ -53,7 +52,7 @@ func LogProcessInfo() {
 		cpuTimes, _ := proc.Times()
 
 		pL := processLog{
-			PID:           pid,
+			PID:           proc.Pid,
 			Name:          name,
 			Background:    background,
 			CPUPercent:    cpuPercent,
@@ -70,7 +69,8 @@ func LogProcessInfo() {
 		filename.WriteString(".json")
 		err = ioutil.WriteFile(filename.String(), jsonPL, 0644)
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 	}
+	return nil
 }

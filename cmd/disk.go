@@ -13,10 +13,28 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-package main
+package cmd
 
-import "github.com/obviyus/goids/cmd"
+import (
+	"fmt"
 
-func main() {
-	cmd.Execute()
+	"github.com/obviyus/goids/fetch"
+	"github.com/spf13/cobra"
+)
+
+// diskCmd represents the disk command
+var diskCmd = &cobra.Command{
+	Use:   "disk",
+	Short: "List basic information about disk",
+	Long:  `List Total, Used and Free space on all disks.`,
+	Run: func(cmd *cobra.Command, args []string) {
+		err := fetch.DiskInfo()
+		if err != nil {
+			fmt.Println("Calling DiskInfo failed: ", err)
+		}
+	},
+}
+
+func init() {
+	rootCmd.AddCommand(diskCmd)
 }

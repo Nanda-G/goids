@@ -1,4 +1,4 @@
-package getinfo
+package fetch
 
 import (
 	"fmt"
@@ -10,9 +10,12 @@ import (
 )
 
 // DiskInfo reads partitions on disk and returns Total, Free and Used space
-func DiskInfo() {
+func DiskInfo() error {
 	parts, err := disk.Partitions(false)
-	check(err)
+	if err != nil {
+		return err
+	}
+	// check(err)
 
 	var usage []*disk.UsageStat
 
@@ -25,20 +28,18 @@ func DiskInfo() {
 
 	for _, part := range parts {
 		u, err := disk.Usage(part.Mountpoint)
-		check(err)
+		if err != nil {
+			return err
+		}
+		// check(err)
 		usage = append(usage, u)
 		printUsage(u, writer)
 	}
+	return nil
 }
 
 func printUsage(u *disk.UsageStat, writer *tabwriter.Writer) {
-	fmt.Fprintf(writer, "%v\t%v%%\t%v\t%v\t%v\n", u.Path, int(u.UsedPercent), humanize.Bytes(u.Total), humanize.Bytes(u.Free),
+	fmt.Fprintf(writer, "%v\t%v %%\t%v\t%v\t%v\n", u.Path, int(u.UsedPercent), humanize.Bytes(u.Total), humanize.Bytes(u.Free),
 		humanize.Bytes(u.Used))
 	writer.Flush()
-}
-
-func check(err error) {
-	if err != nil {
-		panic(err)
-	}
 }
