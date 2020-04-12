@@ -39,7 +39,7 @@ func DiskInfo() error {
 }
 
 func printUsage(u *disk.UsageStat, writer *tabwriter.Writer) {
-	fmt.Fprintf(writer, "%v\t%v%%\t%v\t%v\t%v\n", u.Path, int(u.UsedPercent), humanize.Bytes(u.Total), humanize.Bytes(u.Free),
+	fmt.Fprintf(writer, "%v\t%v %%\t%v\t%v\t%v\n", u.Path, int(u.UsedPercent), humanize.Bytes(u.Total), humanize.Bytes(u.Free),
 		humanize.Bytes(u.Used))
 	writer.Flush()
 }
