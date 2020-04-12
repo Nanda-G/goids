@@ -50,7 +50,9 @@ func LogProcessInfo() error {
 			CPUTimes:      cpuTimes,
 		}
 
+		// AverageLog(pL)
 		go writeToJSON(pL)
+
 		if err != nil {
 			return err
 		}
