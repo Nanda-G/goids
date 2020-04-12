@@ -15,7 +15,6 @@ func DiskInfo() error {
 	if err != nil {
 		return err
 	}
-	// check(err)
 
 	var usage []*disk.UsageStat
 
@@ -31,7 +30,6 @@ func DiskInfo() error {
 		if err != nil {
 			return err
 		}
-		// check(err)
 		usage = append(usage, u)
 		printUsage(u, writer)
 	}
@@ -39,7 +37,8 @@ func DiskInfo() error {
 }
 
 func printUsage(u *disk.UsageStat, writer *tabwriter.Writer) {
-	fmt.Fprintf(writer, "%v\t%v %%\t%v\t%v\t%v\n", u.Path, int(u.UsedPercent), humanize.Bytes(u.Total), humanize.Bytes(u.Free),
+	fmt.Fprintf(writer, "%v\t%v %%\t%v\t%v\t%v\n", u.Path, int(u.UsedPercent),
+		humanize.Bytes(u.Total), humanize.Bytes(u.Free),
 		humanize.Bytes(u.Used))
 	writer.Flush()
 }

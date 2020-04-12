@@ -2,7 +2,6 @@ package store
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"log"
 	"os"
 	"strings"
@@ -12,14 +11,14 @@ import (
 )
 
 type processLog struct {
-	Name          string
-	PID           int32
-	Background    bool
-	CPUPercent    float64
-	RunningTime   int64
-	MemoryPercent float32
-	Status        string
-	CPUTimes      *cpu.TimesStat
+	Name          string         `json:"name"`
+	PID           int32          `json:"pid"`
+	Background    bool           `json:"background"`
+	CPUPercent    float64        `json:"cpupercent"`
+	RunningTime   int64          `json:"runningtime"`
+	MemoryPercent float32        `json:"memorypercent"`
+	Status        string         `json:"status"`
+	CPUTimes      *cpu.TimesStat `json:"cputimes"`
 }
 
 // LogProcessInfo logs all currently running processes with:
@@ -62,15 +61,23 @@ func LogProcessInfo() error {
 			CPUTimes:      cpuTimes,
 		}
 
-		jsonPL, _ := json.MarshalIndent(pL, "", "    ")
-		var filename strings.Builder
-		filename.WriteString("logs/")
-		filename.WriteString(pL.Name)
-		filename.WriteString(".json")
-		err = ioutil.WriteFile(filename.String(), jsonPL, 0644)
+		go writeToJSON(pL)
 		if err != nil {
 			return err
 		}
 	}
 	return nil
+}
+
+func writeToJSON(pL processLog) {
+
+	var filename strings.Builder
+	filename.WriteString("./logs/")
+	filename.WriteString(pL.Name)
+	filename.WriteString(".json")
+
+	file, _ := os.OpenFile(filename.String(), os.O_CREATE, os.ModePerm)
+	defer file.Close()
+	encoder := json.NewEncoder(file)
+	encoder.Encode(pL)
 }

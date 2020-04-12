@@ -1,4 +1,4 @@
-package fetch
+package store
 
 import (
 	"os"
@@ -6,7 +6,7 @@ import (
 )
 
 func TestDiskInfo(t *testing.T) {
-	got := DiskInfo()
+	got := LogProcessInfo()
 
 	if got != nil {
 		t.Error("DiskInfo failed to run: ", got)
@@ -18,6 +18,6 @@ func BenchmarkDiskInfo(b *testing.B) {
 	os.Stdout, _ = os.Open(os.DevNull)
 
 	for i := 0; i < b.N; i++ {
-		DiskInfo()
+		LogProcessInfo()
 	}
 }
