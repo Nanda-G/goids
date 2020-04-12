@@ -1,4 +1,4 @@
-package fetch
+package foo
 
 import (
 	"os"

@@ -1,4 +1,4 @@
-package store
+package foo
 
 import (
 	"encoding/json"
@@ -6,20 +6,9 @@ import (
 	"os"
 	"strings"
 
-	"github.com/shirou/gopsutil/cpu"
+	"github.com/obviyus/goids/app"
 	"github.com/shirou/gopsutil/process"
 )
-
-type processLog struct {
-	Name          string         `json:"name"`
-	PID           int32          `json:"pid"`
-	Background    bool           `json:"background"`
-	CPUPercent    float64        `json:"cpupercent"`
-	RunningTime   int64          `json:"runningtime"`
-	MemoryPercent float32        `json:"memorypercent"`
-	Status        string         `json:"status"`
-	CPUTimes      *cpu.TimesStat `json:"cputimes"`
-}
 
 // LogProcessInfo logs all currently running processes with:
 // Name, PID, background, CPU Percent, Running Time,
@@ -50,7 +39,7 @@ func LogProcessInfo() error {
 		status, _ := proc.Status()
 		cpuTimes, _ := proc.Times()
 
-		pL := processLog{
+		pL := app.ProcessLog{
 			PID:           proc.Pid,
 			Name:          name,
 			Background:    background,
@@ -69,7 +58,7 @@ func LogProcessInfo() error {
 	return nil
 }
 
-func writeToJSON(pL processLog) {
+func writeToJSON(pL app.ProcessLog) {
 
 	var filename strings.Builder
 	filename.WriteString("./logs/")
