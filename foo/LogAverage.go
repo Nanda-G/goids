@@ -6,8 +6,8 @@ import (
 
 // AverageLog takes input 2 ProcessLog structs and returns avergage
 // of their CPU and Memory percentages
-func AverageLog(newLog app.ProcessLog,
-	prevLog app.ProcessLog) app.ProcessLog {
+func AverageLog(prevLog app.ProcessLog,
+	newLog app.ProcessLog) app.ProcessLog {
 
 	averageLog := app.ProcessLog{
 		PID:           newLog.PID,
