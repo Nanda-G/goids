@@ -5,15 +5,35 @@ import (
 )
 
 func TestLogProcessInfo(t *testing.T) {
-	got := LogProcessInfo()
 
-	if got != nil {
-		t.Error("DiskInfo failed to run: ", got)
+	t.Run("Testing JSON encoding", func(t *testing.T) {
+		// Argument 1 for JSON
+		got := LogProcessInfo(1)
+
+		if got != nil {
+			t.Error("LogProcess using JSON failed: ", got)
+		}
+	})
+
+	t.Run("Testing gob encoding", func(t *testing.T) {
+		// Argument 0 for Gob
+		got := LogProcessInfo(0)
+
+		if got != nil {
+			t.Error("LogProcess using gob failed: ", got)
+		}
+	})
+
+}
+
+func BenchmarkLogProcessInfoJSON(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		LogProcessInfo(1)
 	}
 }
 
-func BenchmarkLogProcessInfo(b *testing.B) {
+func BenchmarkLogProcessInfoGob(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		LogProcessInfo()
+		LogProcessInfo(0)
 	}
 }

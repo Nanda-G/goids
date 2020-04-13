@@ -1,6 +1,7 @@
 package foo
 
 import (
+	"encoding/gob"
 	"encoding/json"
 	"log"
 	"os"
@@ -13,7 +14,7 @@ import (
 // LogProcessInfo logs all currently running processes with:
 // Name, PID, background, CPU Percent, Running Time,
 // Memory Percent, Status and CPU times
-func LogProcessInfo() error {
+func LogProcessInfo(choice int) error {
 
 	_, err := os.Stat("logs")
 
@@ -50,9 +51,11 @@ func LogProcessInfo() error {
 			CPUTimes:      cpuTimes,
 		}
 
-		// AverageLog(pL)
-		go writeToJSON(pL)
-
+		if choice == 1 {
+			go writeToJSON(pL)
+		} else {
+			go writeToGob(pL)
+		}
 		if err != nil {
 			return err
 		}
@@ -67,8 +70,24 @@ func writeToJSON(pL app.ProcessLog) {
 	filename.WriteString(pL.Name)
 	filename.WriteString(".json")
 
-	file, _ := os.OpenFile(filename.String(), os.O_CREATE, os.ModePerm)
-	defer file.Close()
-	encoder := json.NewEncoder(file)
-	encoder.Encode(pL)
+	if pL.Name != "" {
+		file, _ := os.OpenFile(filename.String(), os.O_CREATE, os.ModePerm)
+		defer file.Close()
+		encoder := json.NewEncoder(file)
+		encoder.Encode(pL)
+	}
+}
+
+func writeToGob(pL app.ProcessLog) {
+	var filename strings.Builder
+	filename.WriteString("./logs/")
+	filename.WriteString(pL.Name)
+	filename.WriteString(".gob")
+
+	if pL.Name != "" {
+		file, _ := os.OpenFile(filename.String(), os.O_CREATE, os.ModePerm)
+		defer file.Close()
+		encoder := gob.NewEncoder(file)
+		encoder.Encode(pL)
+	}
 }

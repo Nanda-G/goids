@@ -30,7 +30,7 @@ var logCmd = &cobra.Command{
 CPU Percent, Running Time, Memory Percent, Status and CPU times in a JSON file
 per process. All logs are stored in ./logs/`,
 	Run: func(cmd *cobra.Command, args []string) {
-		err := foo.LogProcessInfo()
+		err := foo.LogProcessInfo(1)
 		if err != nil {
 			fmt.Println("Calling LogProcessInfo failed: ", err)
 		}
