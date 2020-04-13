@@ -55,14 +55,16 @@ func LogProcessInfo(choice int) error {
 
 		if choice == 1 {
 			filename.WriteString(".json")
-			go writeToJSON(pL, filename.String())
+			writeToJSON(pL, filename.String())
 		} else {
 			filename.WriteString(".gob")
-			go writeToGob(pL, filename.String())
+			err := writeToGob(pL, filename.String())
+
+			if err != nil {
+				log.Fatal("Error encoding to gob")
+			}
 		}
-		if err != nil {
-			return err
-		}
+
 	}
 	return nil
 }
@@ -72,17 +74,25 @@ func writeToJSON(pL app.ProcessLog, ext string) {
 	if pL.Name != "" {
 		file, _ := os.OpenFile(ext, os.O_CREATE, os.ModePerm)
 		defer file.Close()
-		encoder := json.NewEncoder(file)
-		encoder.Encode(pL)
+		enc := json.NewEncoder(file)
+		err := enc.Encode(pL)
+		if err != nil {
+			log.Fatal("encode error:", err)
+		}
 	}
 }
 
-func writeToGob(pL app.ProcessLog, ext string) {
+func writeToGob(pL app.ProcessLog, ext string) error {
 
 	if pL.Name != "" {
-		file, _ := os.OpenFile(ext, os.O_CREATE, os.ModePerm)
-		defer file.Close()
-		encoder := gob.NewEncoder(file)
-		encoder.Encode(pL)
+		fi, _ := os.OpenFile(ext, os.O_CREATE, os.ModePerm)
+		defer fi.Close()
+
+		enc := gob.NewEncoder(fi)
+		err := enc.Encode(pL)
+		if err != nil {
+			return err
+		}
 	}
+	return nil
 }
