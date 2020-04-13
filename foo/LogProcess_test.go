@@ -26,14 +26,17 @@ func TestLogProcessInfo(t *testing.T) {
 
 }
 
-func BenchmarkLogProcessInfoJSON(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		LogProcessInfo(1)
-	}
-}
+func BenchmarkLogProcessInfo(b *testing.B) {
 
-func BenchmarkLogProcessInfoGob(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		LogProcessInfo(0)
-	}
+	b.Run("Benchmark log to JSON", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			LogProcessInfo(1)
+		}
+	})
+
+	b.Run("Benchmark log to gob", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			LogProcessInfo(0)
+		}
+	})
 }
