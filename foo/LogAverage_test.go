@@ -83,12 +83,12 @@ func TestReadLog(t *testing.T) {
 			Status:        "",
 		}
 
-		err := writeToGob(written, "./logs/TestServiceX.exe.gob")
+		err := writeToGob(written, "TestServiceX.exe.gob")
 		if err != nil {
 			t.Error("Writing to gob failed: ", err)
 		}
 
-		read, err := ReadLog(written)
+		read, err := ReadLog(written, "TestServiceX.exe.gob")
 		if err != nil {
 			t.Error("ReadLog failed: ", err)
 		}
@@ -128,4 +128,26 @@ func BenchmarkAverageFunction(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		AverageLog(x, y)
 	}
+}
+
+func BenchmarkReadAndWrite(b *testing.B) {
+	rand.Seed(time.Now().UnixNano())
+	min := 0.0
+	max := 100.0
+
+	x := app.ProcessLog{
+		PID:           12345,
+		Name:          "TestServiceX.exe",
+		Background:    true,
+		CPUPercent:    (min + rand.Float64()*(max-min)),
+		RunningTime:   1586640172643,
+		MemoryPercent: (float32(min) + rand.Float32()*(float32(max-min))),
+		Status:        "",
+	}
+
+	for i := 0; i < b.N; i++ {
+		writeToGob(x, "TestServiceX.exe.gob")
+		ReadLog(x, "TestServiceX.exe.gob")
+	}
+
 }

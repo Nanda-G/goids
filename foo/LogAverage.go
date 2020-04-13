@@ -3,7 +3,6 @@ package foo
 import (
 	"encoding/gob"
 	"os"
-	"strings"
 
 	"github.com/obviyus/goids/app"
 )
@@ -23,16 +22,11 @@ func AverageLog(prevLog app.ProcessLog,
 
 // ReadLog checks if pased ProcessLog exists in stored logs and returns
 // ProcessLog with last saved value
-func ReadLog(check app.ProcessLog) (app.ProcessLog, error) {
+func ReadLog(check app.ProcessLog, loc string) (app.ProcessLog, error) {
 
 	openedLog := new(app.ProcessLog)
 
-	var filename strings.Builder
-	filename.WriteString("./logs/")
-	filename.WriteString(check.Name)
-	filename.WriteString(".gob")
-
-	fo, err := os.Open(filename.String())
+	fo, err := os.Open(loc)
 	if err != nil {
 		return *openedLog, err
 	}
