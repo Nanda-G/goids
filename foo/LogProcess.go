@@ -2,7 +2,6 @@ package foo
 
 import (
 	"encoding/gob"
-	"encoding/json"
 	"log"
 	"os"
 	"strings"
@@ -53,33 +52,15 @@ func LogProcessInfo(choice int) error {
 		filename.WriteString("./logs/")
 		filename.WriteString(pL.Name)
 
-		if choice == 1 {
-			filename.WriteString(".json")
-			writeToJSON(pL, filename.String())
-		} else {
-			filename.WriteString(".gob")
-			err := writeToGob(pL, filename.String())
+		filename.WriteString(".gob")
+		err := writeToGob(pL, filename.String())
 
-			if err != nil {
-				log.Fatal("Error encoding to gob")
-			}
+		if err != nil {
+			log.Fatal("Error encoding to gob")
 		}
 
 	}
 	return nil
-}
-
-func writeToJSON(pL app.ProcessLog, ext string) {
-
-	if pL.Name != "" {
-		file, _ := os.OpenFile(ext, os.O_CREATE|os.O_RDWR, os.ModePerm)
-		defer file.Close()
-		enc := json.NewEncoder(file)
-		err := enc.Encode(pL)
-		if err != nil {
-			log.Fatal("encode error:", err)
-		}
-	}
 }
 
 func writeToGob(pL app.ProcessLog, loc string) error {
