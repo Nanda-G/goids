@@ -67,6 +67,38 @@ func TestAvergeFunction(t *testing.T) {
 	})
 }
 
+func TestReadLog(t *testing.T) {
+	// expected: write a ProcessLog to gob (use writeToGob())
+	// read the gob by passing a new ProcessLog (ReadLog())
+	// confirm if read value is same as written value
+
+	t.Run("write and read gob", func(t *testing.T) {
+		written := app.ProcessLog{
+			PID:           12345,
+			Name:          "TestServiceX.exe",
+			Background:    true,
+			CPUPercent:    15.0,
+			RunningTime:   1586640172643,
+			MemoryPercent: 0.23892,
+			Status:        "",
+		}
+
+		err := writeToGob(written, "./logs/TestServiceX.exe.gob")
+		if err != nil {
+			t.Error("Writing to gob failed: ", err)
+		}
+
+		read, err := ReadLog(written)
+		if err != nil {
+			t.Error("ReadLog failed: ", err)
+		}
+
+		if !reflect.DeepEqual(read, written) {
+			t.Errorf("\nExpected: %v \nGot: %v", written, read)
+		}
+	})
+}
+
 func BenchmarkAverageFunction(b *testing.B) {
 
 	rand.Seed(time.Now().UnixNano())

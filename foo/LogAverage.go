@@ -1,6 +1,10 @@
 package foo
 
 import (
+	"encoding/gob"
+	"os"
+	"strings"
+
 	"github.com/obviyus/goids/app"
 )
 
@@ -15,4 +19,26 @@ func AverageLog(prevLog app.ProcessLog,
 	averageLog.MemAverages.Latest = (newLog.MemoryPercent + prevLog.MemoryPercent) / 2.0
 
 	return (averageLog)
+}
+
+// ReadLog checks if pased ProcessLog exists in stored logs and returns
+// ProcessLog with last saved value
+func ReadLog(check app.ProcessLog) (app.ProcessLog, error) {
+
+	openedLog := new(app.ProcessLog)
+
+	var filename strings.Builder
+	filename.WriteString("./logs/")
+	filename.WriteString(check.Name)
+	filename.WriteString(".gob")
+
+	fo, err := os.Open(filename.String())
+	if err != nil {
+		return *openedLog, err
+	}
+
+	dec := gob.NewDecoder(fo)
+	err = dec.Decode(&openedLog)
+
+	return *openedLog, nil
 }
