@@ -72,7 +72,7 @@ func LogProcessInfo(choice int) error {
 func writeToJSON(pL app.ProcessLog, ext string) {
 
 	if pL.Name != "" {
-		file, _ := os.OpenFile(ext, os.O_CREATE|os.O_WRONLY, os.ModePerm)
+		file, _ := os.OpenFile(ext, os.O_CREATE|os.O_RDWR, os.ModePerm)
 		defer file.Close()
 		enc := json.NewEncoder(file)
 		err := enc.Encode(pL)
@@ -85,7 +85,7 @@ func writeToJSON(pL app.ProcessLog, ext string) {
 func writeToGob(pL app.ProcessLog, loc string) error {
 
 	if pL.Name != "" {
-		fi, _ := os.OpenFile(loc, os.O_CREATE|os.O_WRONLY, os.ModePerm)
+		fi, _ := os.OpenFile(loc, os.O_CREATE|os.O_RDWR, os.ModePerm)
 		defer fi.Close()
 
 		enc := gob.NewEncoder(fi)
