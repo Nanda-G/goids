@@ -38,7 +38,6 @@ func LogProcessInfo(choice int) error {
 		runningTime, _ := proc.CreateTime()
 		memoryPercent, _ := proc.MemoryPercent()
 		status, _ := proc.Status()
-		cpuTimes, _ := proc.Times()
 
 		pL := app.ProcessLog{
 			PID:           proc.Pid,
@@ -48,13 +47,18 @@ func LogProcessInfo(choice int) error {
 			RunningTime:   runningTime,
 			MemoryPercent: memoryPercent,
 			Status:        status,
-			CPUTimes:      cpuTimes,
 		}
 
+		var filename strings.Builder
+		filename.WriteString("./logs/")
+		filename.WriteString(pL.Name)
+
 		if choice == 1 {
-			go writeToJSON(pL)
+			filename.WriteString(".json")
+			go writeToJSON(pL, filename.String())
 		} else {
-			go writeToGob(pL)
+			filename.WriteString(".gob")
+			go writeToGob(pL, filename.String())
 		}
 		if err != nil {
 			return err
@@ -63,29 +67,20 @@ func LogProcessInfo(choice int) error {
 	return nil
 }
 
-func writeToJSON(pL app.ProcessLog) {
-
-	var filename strings.Builder
-	filename.WriteString("./logs/")
-	filename.WriteString(pL.Name)
-	filename.WriteString(".json")
+func writeToJSON(pL app.ProcessLog, ext string) {
 
 	if pL.Name != "" {
-		file, _ := os.OpenFile(filename.String(), os.O_CREATE, os.ModePerm)
+		file, _ := os.OpenFile(ext, os.O_CREATE, os.ModePerm)
 		defer file.Close()
 		encoder := json.NewEncoder(file)
 		encoder.Encode(pL)
 	}
 }
 
-func writeToGob(pL app.ProcessLog) {
-	var filename strings.Builder
-	filename.WriteString("./logs/")
-	filename.WriteString(pL.Name)
-	filename.WriteString(".gob")
+func writeToGob(pL app.ProcessLog, ext string) {
 
 	if pL.Name != "" {
-		file, _ := os.OpenFile(filename.String(), os.O_CREATE, os.ModePerm)
+		file, _ := os.OpenFile(ext, os.O_CREATE, os.ModePerm)
 		defer file.Close()
 		encoder := gob.NewEncoder(file)
 		encoder.Encode(pL)

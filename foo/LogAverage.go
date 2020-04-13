@@ -9,15 +9,10 @@ import (
 func AverageLog(prevLog app.ProcessLog,
 	newLog app.ProcessLog) app.ProcessLog {
 
-	averageLog := app.ProcessLog{
-		PID:           newLog.PID,
-		Name:          newLog.Name,
-		Background:    newLog.Background,
-		CPUPercent:    ((newLog.CPUPercent + prevLog.CPUPercent) / 2.0),
-		RunningTime:   newLog.RunningTime,
-		MemoryPercent: ((newLog.MemoryPercent + prevLog.MemoryPercent) / 2.0),
-		Status:        newLog.Status,
-	}
+	averageLog := newLog
+
+	averageLog.CPUAverages.Latest = (newLog.CPUPercent + prevLog.CPUPercent) / 2.0
+	averageLog.MemAverages.Latest = (newLog.MemoryPercent + prevLog.MemoryPercent) / 2.0
 
 	return (averageLog)
 }

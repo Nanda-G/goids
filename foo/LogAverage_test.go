@@ -2,6 +2,7 @@ package foo
 
 import (
 	"math/rand"
+	"reflect"
 	"testing"
 	"time"
 
@@ -9,54 +10,61 @@ import (
 )
 
 func TestAvergeFunction(t *testing.T) {
+	t.Run("random value", func(t *testing.T) {
+		rand.Seed(time.Now().UnixNano())
+		min := 0.0
+		max := 100.0
 
-	rand.Seed(time.Now().UnixNano())
-	min := 0.0
-	max := 100.0
+		cpuX := (min + rand.Float64()*(max-min))
+		memX := (float32(min) + rand.Float32()*(float32(max-min)))
+		cpuY := (min + rand.Float64()*(max-min))
+		memY := (float32(min) + rand.Float32()*(float32(max-min)))
 
-	cpuX := (min + rand.Float64()*(max-min))
-	memX := (float32(min) + rand.Float32()*(float32(max-min)))
-	cpuY := (min + rand.Float64()*(max-min))
-	memY := (float32(min) + rand.Float32()*(float32(max-min)))
+		x := app.ProcessLog{
+			PID:           12345,
+			Name:          "serviceX.exe",
+			Background:    true,
+			CPUPercent:    cpuX,
+			RunningTime:   1586640172643,
+			MemoryPercent: memX,
+			Status:        "",
+		}
 
-	x := app.ProcessLog{
-		PID:           12345,
-		Name:          "serviceX.exe",
-		Background:    true,
-		CPUPercent:    cpuX,
-		RunningTime:   1586640172643,
-		MemoryPercent: memX,
-		Status:        "",
-	}
+		y := app.ProcessLog{
+			PID:           54321,
+			Name:          "serviceY.exe",
+			Background:    true,
+			CPUPercent:    cpuY,
+			RunningTime:   1586648592643,
+			MemoryPercent: memY,
+			Status:        "",
+		}
 
-	y := app.ProcessLog{
-		PID:           54321,
-		Name:          "serviceY.exe",
-		Background:    true,
-		CPUPercent:    cpuY,
-		RunningTime:   1586648592643,
-		MemoryPercent: memY,
-		Status:        "",
-	}
+		cpuAverage := (cpuX + cpuY) / 2.0
+		memAverage := (memX + memY) / 2.0
 
-	cpuAverage := (cpuX + cpuY) / 2.0
-	memAverage := (memX + memY) / 2.0
+		expected := app.ProcessLog{
+			PID:           54321,
+			Name:          "serviceY.exe",
+			Background:    true,
+			CPUPercent:    cpuAverage,
+			RunningTime:   1586648592643,
+			MemoryPercent: memAverage,
+			Status:        "",
+			CPUAverages: app.CPUAverages{
+				Latest: cpuAverage,
+			},
+			MemAverages: app.MemAverages{
+				Latest: memAverage,
+			},
+		}
 
-	expected := app.ProcessLog{
-		PID:           54321,
-		Name:          "serviceY.exe",
-		Background:    true,
-		CPUPercent:    cpuAverage,
-		RunningTime:   1586648592643,
-		MemoryPercent: memAverage,
-		Status:        "",
-	}
+		averaged := AverageLog(x, y)
 
-	averaged := AverageLog(x, y)
-
-	if averaged != expected {
-		t.Errorf("expected %v but got %v", expected, averaged)
-	}
+		if reflect.DeepEqual(averaged, expected) {
+			t.Errorf("expected %v but got %v", expected, averaged)
+		}
+	})
 }
 
 func BenchmarkAverageFunction(b *testing.B) {
