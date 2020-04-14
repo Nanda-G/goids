@@ -15,6 +15,15 @@ func TestLogProcessInfo(t *testing.T) {
 		}
 	})
 
+	t.Run("Testing json encoding", func(t *testing.T) {
+		// Argument 0 for Gob
+		got := LogProcessInfo(1)
+
+		if got != nil {
+			t.Error("LogProcess using gob failed: ", got)
+		}
+	})
+
 }
 
 func BenchmarkLogProcessInfo(b *testing.B) {
@@ -24,4 +33,11 @@ func BenchmarkLogProcessInfo(b *testing.B) {
 			LogProcessInfo(0)
 		}
 	})
+
+	b.Run("Benchmark log to JSON", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			LogProcessInfo(1)
+		}
+	})
+
 }
