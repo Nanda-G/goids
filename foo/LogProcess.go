@@ -49,7 +49,7 @@ func LogProcessInfo(choice int) error {
 		}
 
 		var filename strings.Builder
-		filename.WriteString("./logs/")
+		filename.WriteString("/logs/")
 		filename.WriteString(pL.Name)
 
 		filename.WriteString(".gob")
