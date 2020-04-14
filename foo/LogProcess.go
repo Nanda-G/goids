@@ -56,7 +56,7 @@ func LogProcessInfo(choice int) error {
 		err := writeToGob(pL, filename.String())
 
 		if err != nil {
-			log.Fatal("Error encoding to gob")
+			log.Fatal("Error encoding to gob: ", err)
 		}
 
 	}
@@ -66,11 +66,14 @@ func LogProcessInfo(choice int) error {
 func writeToGob(pL app.ProcessLog, loc string) error {
 
 	if pL.Name != "" {
-		fi, _ := os.OpenFile(loc, os.O_CREATE|os.O_RDWR, os.ModePerm)
+		fi, err := os.OpenFile(loc, os.O_CREATE|os.O_WRONLY, os.ModePerm)
+		if err != nil {
+			log.Fatal(err)
+		}
 		defer fi.Close()
 
 		enc := gob.NewEncoder(fi)
-		err := enc.Encode(pL)
+		err = enc.Encode(pL)
 		if err != nil {
 			return err
 		}
